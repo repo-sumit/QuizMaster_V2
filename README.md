@@ -169,14 +169,6 @@ User:
 
 ---
 
-## 🌍 Future Enhancements
-
-* AI-driven **personalized quiz recommendations**
-* **Gamification features** (badges, leaderboards)
-* Cloud deployment templates (Docker, Kubernetes)
-
----
-
 ## ❤️ Acknowledgements
 
 Built with passion using **Flask + Vue.js**.
