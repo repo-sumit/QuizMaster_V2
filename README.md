@@ -50,7 +50,7 @@ It’s designed to deliver **seamless learning assessments**, **dynamic quiz cre
 | 🖥️ Frontend | Vue.js 3, Vue Router, Vuex/Pinia, Axios, Bootstrap/Tailwind |
 | ⚙️ Backend   | Flask, Flask-RESTful, Flask-JWT-Extended                    |
 | 💾 Database  | SQLite (dev), PostgreSQL/MySQL (prod-ready)                 |
-| 📊 Charts    | Chart.js / ECharts                                          |
+| 📊 Charts    | Chart.js & ECharts                                          |
 | 🛡️ Security | JWT Auth, Password Hashing, Role-Based Access               |
 | 🔐 Session   | Token-based auth for SPA                                    |
 
