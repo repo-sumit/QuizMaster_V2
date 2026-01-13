@@ -41,6 +41,9 @@
             <button class="btn btn-primary" @click="exportData">
               <i class="fas fa-file-export"></i> Export
             </button>
+            <button class="btn btn-outline-danger" @click="logout">
+              <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
           </div>
         </div>
       </div>
@@ -81,8 +84,30 @@
         </div>
       </div>
 
+      <div class="card glass-panel p-3 mb-4">
+        <div class="d-flex flex-wrap gap-3 align-items-center justify-content-between">
+          <div class="flex-grow-1">
+            <div class="input-group">
+              <span class="input-group-text bg-white"><i class="fas fa-search"></i></span>
+              <input v-model="subjectQuery" type="text" class="form-control" placeholder="Search subjects...">
+            </div>
+          </div>
+          <div class="dropdown">
+            <button class="btn btn-outline-brand dropdown-toggle" type="button" data-bs-toggle="dropdown">
+              Sort: {{ sortLabel }}
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><button class="dropdown-item" @click="subjectSort = 'name_asc'">Name (A-Z)</button></li>
+              <li><button class="dropdown-item" @click="subjectSort = 'name_desc'">Name (Z-A)</button></li>
+              <li><button class="dropdown-item" @click="subjectSort = 'chapters_desc'">Most chapters</button></li>
+              <li><button class="dropdown-item" @click="subjectSort = 'quizzes_desc'">Most quizzes</button></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
       <div class="row">
-        <div v-for="subject in subjects" :key="subject.id" class="col-lg-6 mb-4">
+        <div v-for="subject in filteredSubjects" :key="subject.id" class="col-lg-6 mb-4">
           <div class="card subject-card shadow">
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
               <h6 class="m-0 font-weight-bold text-primary">{{ subject.name }}</h6>
@@ -228,6 +253,8 @@ export default {
     const subjects = ref([]);
     const newSubject = ref({ name: '', description: '' });
     const newChapter = ref({ name: '', description: '' });
+    const subjectQuery = ref('');
+    const subjectSort = ref('name_asc');
 
     const subjectCount = computed(() => subjects.value.length);
     const chapterCount = computed(() => {
@@ -239,6 +266,47 @@ export default {
           return innerSum + (chapter.quizzes ? chapter.quizzes.length : 0);
         }, 0);
       }, 0);
+    });
+
+    const getQuizTotal = (subject) => {
+      return (subject.chapters || []).reduce((sum, chapter) => {
+        return sum + (chapter.quizzes ? chapter.quizzes.length : 0);
+      }, 0);
+    };
+
+    const sortLabel = computed(() => {
+      const labels = {
+        name_asc: 'Name (A-Z)',
+        name_desc: 'Name (Z-A)',
+        chapters_desc: 'Most chapters',
+        quizzes_desc: 'Most quizzes',
+      };
+      return labels[subjectSort.value] || 'Name (A-Z)';
+    });
+
+    const filteredSubjects = computed(() => {
+      let list = [...subjects.value];
+      const term = subjectQuery.value.trim().toLowerCase();
+      if (term) {
+        list = list.filter(subject =>
+          subject.name.toLowerCase().includes(term) ||
+          (subject.description || '').toLowerCase().includes(term)
+        );
+      }
+      switch (subjectSort.value) {
+        case 'name_desc':
+          list.sort((a, b) => b.name.localeCompare(a.name));
+          break;
+        case 'chapters_desc':
+          list.sort((a, b) => (b.chapters?.length || 0) - (a.chapters?.length || 0));
+          break;
+        case 'quizzes_desc':
+          list.sort((a, b) => getQuizTotal(b) - getQuizTotal(a));
+          break;
+        default:
+          list.sort((a, b) => a.name.localeCompare(b.name));
+      }
+      return list;
     });
 
     // Helper function to get headers with token
@@ -425,6 +493,10 @@ export default {
       subjectCount,
       chapterCount,
       quizCount,
+      subjectQuery,
+      subjectSort,
+      sortLabel,
+      filteredSubjects,
       createSubject,
       editSubject,
       deleteSubject,

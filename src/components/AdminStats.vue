@@ -190,6 +190,7 @@
                       <th>Full Name</th>
                       <th>Total Attempts</th>
                       <th>Average Score (%)</th>
+                      <th>History</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -202,12 +203,64 @@
                       <td>{{ summary.full_name }}</td>
                       <td>{{ summary.total_attempts }}</td>
                       <td>{{ summary.avg_score }}</td>
+                      <td>
+                        <button class="btn btn-outline-brand btn-sm" @click="openScoreHistory(summary)">
+                          View History
+                        </button>
+                      </td>
                     </tr>
                   </tbody>
                 </table>
                 <div v-if="!score_summary.length" class="text-center muted py-4">
                   No score data available yet.
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="userScoresModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div>
+              <h5 class="modal-title">Attempt History</h5>
+              <p class="muted mb-0 small" v-if="selectedUser">
+                {{ selectedUser.full_name }} ({{ selectedUser.username }})
+              </p>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div v-if="scoresLoading" class="text-center py-4">Loading scores...</div>
+            <div v-else-if="scoresError" class="alert alert-danger">{{ scoresError }}</div>
+            <div v-else>
+              <table class="table table-sm table-striped align-middle">
+                <thead>
+                  <tr>
+                    <th>Quiz</th>
+                    <th>Subject</th>
+                    <th>Chapter</th>
+                    <th>Score</th>
+                    <th>Percent</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="score in userScores" :key="score.id">
+                    <td>{{ score.quiz_title }}</td>
+                    <td>{{ score.subject_name }}</td>
+                    <td>{{ score.chapter_name }}</td>
+                    <td>{{ score.score }}/{{ score.total_questions }}</td>
+                    <td>{{ score.percentage }}%</td>
+                    <td>{{ formatDate(score.timestamp) }}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div v-if="!userScores.length" class="text-center muted py-3">
+                No attempts recorded for this user yet.
               </div>
             </div>
           </div>
@@ -232,6 +285,10 @@ export default {
     const score_summary = ref([]);
     const subjects = ref([]);
     const lastUpdated = ref('Just now');
+    const selectedUser = ref(null);
+    const userScores = ref([]);
+    const scoresLoading = ref(false);
+    const scoresError = ref('');
     const contentChart = ref(null);
     const performerChart = ref(null);
     let contentChartInstance = null;
@@ -328,6 +385,39 @@ export default {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       router.push('/login');
+    };
+
+    const formatDate = (value) => {
+      if (!value) return '-';
+      return new Date(value).toLocaleString();
+    };
+
+    const openScoreHistory = async (summary) => {
+      selectedUser.value = summary;
+      scoresLoading.value = true;
+      scoresError.value = '';
+      userScores.value = [];
+      try {
+        const response = await fetch(`http://127.0.0.1:5000/api/users/${summary.user_id}/scores`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        if (response.ok) {
+          userScores.value = await response.json();
+        } else {
+          scoresError.value = 'Failed to fetch user scores.';
+        }
+      } catch (error) {
+        scoresError.value = 'Failed to fetch user scores.';
+      } finally {
+        scoresLoading.value = false;
+      }
+
+      const modal = new window.bootstrap.Modal(document.getElementById('userScoresModal'));
+      modal.show();
     };
 
     const buildContentChart = () => {
@@ -429,6 +519,12 @@ export default {
       bestPerformer,
       mostActive,
       averageScore,
+      selectedUser,
+      userScores,
+      scoresLoading,
+      scoresError,
+      formatDate,
+      openScoreHistory,
       exportData,
       logout,
       fetchDashboardData,

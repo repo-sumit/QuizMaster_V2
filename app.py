@@ -3,6 +3,7 @@ from flask_cors import CORS
 from sqlalchemy import func
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timedelta
+import os
 from backend.models import db, User, Quiz, Question, Score, Chapter, Subject
 
 import jwt
@@ -116,6 +117,62 @@ def create_admin():
         )
         db.session.add(admin)
         db.session.commit()
+
+def load_seed_data():
+    seed_path = os.path.join(os.path.dirname(__file__), 'backend', 'seed_data.json')
+    if not os.path.exists(seed_path):
+        print("Seed data not found, skipping default content.")
+        return None
+    with open(seed_path, 'r', encoding='utf-8') as seed_file:
+        return json.load(seed_file)
+
+def seed_default_content():
+    data = load_seed_data()
+    if not data or not data.get('subjects'):
+        return
+
+    for subject_data in data['subjects']:
+        subject = Subject(
+            name=subject_data['name'],
+            description=subject_data.get('description', '')
+        )
+        db.session.add(subject)
+        db.session.flush()
+
+        for chapter_data in subject_data.get('chapters', []):
+            chapter = Chapter(
+                name=chapter_data['name'],
+                description=chapter_data.get('description', ''),
+                subject_id=subject.id
+            )
+            db.session.add(chapter)
+            db.session.flush()
+
+            for quiz_data in chapter_data.get('quizzes', []):
+                quiz = Quiz(
+                    title=quiz_data['title'],
+                    date_of_quiz=quiz_data.get('date_of_quiz', ''),
+                    time_duration=quiz_data.get('time_duration', ''),
+                    remarks=quiz_data.get('remarks', ''),
+                    chapter_id=chapter.id
+                )
+                db.session.add(quiz)
+                db.session.flush()
+
+                for question_data in quiz_data.get('questions', []):
+                    question = Question(
+                        question_statement=question_data['question_statement'],
+                        option1=question_data['option1'],
+                        option2=question_data['option2'],
+                        option3=question_data.get('option3', ''),
+                        option4=question_data.get('option4', ''),
+                        correct_option=int(question_data['correct_option']),
+                        quiz_id=quiz.id
+                    )
+                    db.session.add(question)
+
+    db.session.commit()
+    print("Default subjects, chapters, quizzes, and questions seeded.")
 
 # API Endpoints
 
@@ -750,6 +807,8 @@ def init_app():
     with app.app_context():
         db.create_all()
         create_admin()
+        if Subject.query.count() == 0:
+            seed_default_content()
         print("Database initialized")
         print("Admin user created (username: admin, password: 0000)")
         if redis_client:

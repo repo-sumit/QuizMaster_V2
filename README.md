@@ -169,6 +169,22 @@ User:
 
 ---
 
+## Seed Data (JSON)
+
+The backend automatically seeds default subjects, chapters, quizzes, and questions when the database is empty.
+
+- Seed file: `backend/seed_data.json`
+- Trigger: First run with no subjects in the database
+- Reset: Delete `quizmaster.db` and restart the backend to re-seed
+
+---
+
+## UI Highlights
+
+- Admin and student dashboards include subject sorting and filtering controls.
+- Student dashboard includes a "Practice Mix" generator for quick test runs.
+- Focus sprint timer and notes help keep study sessions organized.
+
 ## ❤️ Acknowledgements
 
 Built with passion using **Flask + Vue.js**.

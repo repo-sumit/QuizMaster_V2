@@ -1,0 +1,588 @@
+{
+  "subjects": [
+    {
+      "name": "Web Development",
+      "description": "Build modern websites and web apps with a solid front-to-back foundation.",
+      "chapters": [
+        {
+          "name": "HTML Foundations",
+          "description": "Semantic structure, accessibility, and forms.",
+          "quizzes": [
+            {
+              "title": "HTML Essentials",
+              "date_of_quiz": "2026-01-01",
+              "time_duration": "10 min",
+              "remarks": "Core tags, structure, and accessibility.",
+              "questions": [
+                {
+                  "question_statement": "Which element best represents the main content of a page?",
+                  "option1": "<main>",
+                  "option2": "<section>",
+                  "option3": "<article>",
+                  "option4": "<div>",
+                  "correct_option": 1
+                },
+                {
+                  "question_statement": "What is the correct attribute for describing an image?",
+                  "option1": "title",
+                  "option2": "alt",
+                  "option3": "name",
+                  "option4": "caption",
+                  "correct_option": 2
+                },
+                {
+                  "question_statement": "Which input type is used for email validation in HTML5?",
+                  "option1": "text",
+                  "option2": "mail",
+                  "option3": "email",
+                  "option4": "validate",
+                  "correct_option": 3
+                }
+              ]
+            },
+            {
+              "title": "Forms and Tables",
+              "date_of_quiz": "2026-01-05",
+              "time_duration": "12 min",
+              "remarks": "Working with form controls and data tables.",
+              "questions": [
+                {
+                  "question_statement": "Which tag groups related form elements?",
+                  "option1": "<fieldset>",
+                  "option2": "<formgroup>",
+                  "option3": "<group>",
+                  "option4": "<legend>",
+                  "correct_option": 1
+                },
+                {
+                  "question_statement": "Which table element defines a table header cell?",
+                  "option1": "<td>",
+                  "option2": "<th>",
+                  "option3": "<thead>",
+                  "option4": "<tr>",
+                  "correct_option": 2
+                },
+                {
+                  "question_statement": "Which input attribute makes a field mandatory?",
+                  "option1": "required",
+                  "option2": "validate",
+                  "option3": "must",
+                  "option4": "mandatory",
+                  "correct_option": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "JavaScript Essentials",
+          "description": "Modern JS, DOM interactions, and async flows.",
+          "quizzes": [
+            {
+              "title": "JavaScript Basics",
+              "date_of_quiz": "2026-01-15",
+              "time_duration": "12 min",
+              "remarks": "Variables, functions, and arrays.",
+              "questions": [
+                {
+                  "question_statement": "Which keyword declares a block-scoped variable?",
+                  "option1": "var",
+                  "option2": "const",
+                  "option3": "function",
+                  "option4": "scope",
+                  "correct_option": 2
+                },
+                {
+                  "question_statement": "Which method adds an item to the end of an array?",
+                  "option1": "push",
+                  "option2": "pop",
+                  "option3": "shift",
+                  "option4": "splice",
+                  "correct_option": 1
+                },
+                {
+                  "question_statement": "Which symbol is used for strict equality?",
+                  "option1": "=",
+                  "option2": "==",
+                  "option3": "===",
+                  "option4": "!=",
+                  "correct_option": 3
+                }
+              ]
+            },
+            {
+              "title": "Async JavaScript",
+              "date_of_quiz": "2026-01-18",
+              "time_duration": "12 min",
+              "remarks": "Promises, async/await, and APIs.",
+              "questions": [
+                {
+                  "question_statement": "Which keyword pauses execution until a promise resolves?",
+                  "option1": "wait",
+                  "option2": "pause",
+                  "option3": "await",
+                  "option4": "hold",
+                  "correct_option": 3
+                },
+                {
+                  "question_statement": "What does fetch return by default?",
+                  "option1": "A response object wrapped in a promise",
+                  "option2": "Parsed JSON",
+                  "option3": "HTML text",
+                  "option4": "A callback",
+                  "correct_option": 1
+                },
+                {
+                  "question_statement": "Which method parses JSON from a fetch response?",
+                  "option1": "parse()",
+                  "option2": "json()",
+                  "option3": "text()",
+                  "option4": "data()",
+                  "correct_option": 2
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Data Science",
+      "description": "Clean, analyze, and visualize data to drive insights.",
+      "chapters": [
+        {
+          "name": "Data Fundamentals",
+          "description": "Data types, cleaning, and descriptive statistics.",
+          "quizzes": [
+            {
+              "title": "Data Cleaning",
+              "date_of_quiz": "2026-01-08",
+              "time_duration": "10 min",
+              "remarks": "Handling missing values and outliers.",
+              "questions": [
+                {
+                  "question_statement": "Which technique fills missing values with the mean?",
+                  "option1": "Scaling",
+                  "option2": "Imputation",
+                  "option3": "Encoding",
+                  "option4": "Sampling",
+                  "correct_option": 2
+                },
+                {
+                  "question_statement": "What is an outlier?",
+                  "option1": "A value far from others",
+                  "option2": "A duplicate row",
+                  "option3": "A missing value",
+                  "option4": "A normalized value",
+                  "correct_option": 1
+                },
+                {
+                  "question_statement": "Which chart is best for distributions?",
+                  "option1": "Pie chart",
+                  "option2": "Scatter plot",
+                  "option3": "Histogram",
+                  "option4": "Line chart",
+                  "correct_option": 3
+                }
+              ]
+            },
+            {
+              "title": "Statistics Basics",
+              "date_of_quiz": "2026-01-09",
+              "time_duration": "10 min",
+              "remarks": "Mean, median, and variance.",
+              "questions": [
+                {
+                  "question_statement": "Which metric describes spread?",
+                  "option1": "Mean",
+                  "option2": "Median",
+                  "option3": "Variance",
+                  "option4": "Mode",
+                  "correct_option": 3
+                },
+                {
+                  "question_statement": "Which measure is robust to outliers?",
+                  "option1": "Mean",
+                  "option2": "Median",
+                  "option3": "Range",
+                  "option4": "Variance",
+                  "correct_option": 2
+                },
+                {
+                  "question_statement": "What is the sum of probabilities in a distribution?",
+                  "option1": "0",
+                  "option2": "1",
+                  "option3": "10",
+                  "option4": "Depends on sample size",
+                  "correct_option": 2
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Python for Data",
+          "description": "NumPy, pandas, and data workflows.",
+          "quizzes": [
+            {
+              "title": "Pandas Basics",
+              "date_of_quiz": "2026-01-11",
+              "time_duration": "12 min",
+              "remarks": "DataFrames, filtering, and grouping.",
+              "questions": [
+                {
+                  "question_statement": "Which pandas method shows the first 5 rows?",
+                  "option1": "head()",
+                  "option2": "tail()",
+                  "option3": "info()",
+                  "option4": "sample()",
+                  "correct_option": 1
+                },
+                {
+                  "question_statement": "Which method groups data by a column?",
+                  "option1": "groupby()",
+                  "option2": "merge()",
+                  "option3": "join()",
+                  "option4": "pivot()",
+                  "correct_option": 1
+                },
+                {
+                  "question_statement": "Which method selects rows by label?",
+                  "option1": "iloc",
+                  "option2": "loc",
+                  "option3": "filter",
+                  "option4": "where",
+                  "correct_option": 2
+                }
+              ]
+            },
+            {
+              "title": "NumPy Arrays",
+              "date_of_quiz": "2026-01-12",
+              "time_duration": "10 min",
+              "remarks": "Array operations and broadcasting.",
+              "questions": [
+                {
+                  "question_statement": "Which NumPy function creates zeros?",
+                  "option1": "zeros()",
+                  "option2": "ones()",
+                  "option3": "empty()",
+                  "option4": "array()",
+                  "correct_option": 1
+                },
+                {
+                  "question_statement": "What is broadcasting?",
+                  "option1": "Sending data over the network",
+                  "option2": "Expanding arrays to match shapes",
+                  "option3": "Converting data types",
+                  "option4": "Sorting arrays",
+                  "correct_option": 2
+                },
+                {
+                  "question_statement": "Which attribute gives array shape?",
+                  "option1": "size",
+                  "option2": "dtype",
+                  "option3": "shape",
+                  "option4": "ndim",
+                  "correct_option": 3
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Cybersecurity",
+      "description": "Protect systems, data, and users with modern security practices.",
+      "chapters": [
+        {
+          "name": "Security Basics",
+          "description": "Threats, vulnerabilities, and controls.",
+          "quizzes": [
+            {
+              "title": "Threat Landscape",
+              "date_of_quiz": "2026-01-20",
+              "time_duration": "10 min",
+              "remarks": "Know common threats and attack vectors.",
+              "questions": [
+                {
+                  "question_statement": "What is phishing?",
+                  "option1": "Network monitoring",
+                  "option2": "Social engineering attack",
+                  "option3": "Data backup",
+                  "option4": "Encryption method",
+                  "correct_option": 2
+                },
+                {
+                  "question_statement": "Which is an example of malware?",
+                  "option1": "Firewall",
+                  "option2": "Antivirus",
+                  "option3": "Ransomware",
+                  "option4": "Load balancer",
+                  "correct_option": 3
+                },
+                {
+                  "question_statement": "Which control limits user access?",
+                  "option1": "Least privilege",
+                  "option2": "Encryption",
+                  "option3": "Backups",
+                  "option4": "Monitoring",
+                  "correct_option": 1
+                }
+              ]
+            },
+            {
+              "title": "Authentication",
+              "date_of_quiz": "2026-01-21",
+              "time_duration": "10 min",
+              "remarks": "Passwords, MFA, and access control.",
+              "questions": [
+                {
+                  "question_statement": "What does MFA stand for?",
+                  "option1": "Multi-factor authentication",
+                  "option2": "Mainframe access",
+                  "option3": "Managed firewall access",
+                  "option4": "Multi-file access",
+                  "correct_option": 1
+                },
+                {
+                  "question_statement": "Which factor is something you have?",
+                  "option1": "Password",
+                  "option2": "Fingerprint",
+                  "option3": "Security token",
+                  "option4": "PIN",
+                  "correct_option": 3
+                },
+                {
+                  "question_statement": "Which is the most secure password practice?",
+                  "option1": "Reusing passwords",
+                  "option2": "Short passwords",
+                  "option3": "Unique long passwords",
+                  "option4": "Using birthdays",
+                  "correct_option": 3
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Network Security",
+          "description": "Firewalls, segmentation, and monitoring.",
+          "quizzes": [
+            {
+              "title": "Firewalls 101",
+              "date_of_quiz": "2026-01-23",
+              "time_duration": "10 min",
+              "remarks": "Filtering traffic and rules.",
+              "questions": [
+                {
+                  "question_statement": "What does a firewall do?",
+                  "option1": "Stores passwords",
+                  "option2": "Filters network traffic",
+                  "option3": "Encrypts files",
+                  "option4": "Scans emails",
+                  "correct_option": 2
+                },
+                {
+                  "question_statement": "Which rule is most secure?",
+                  "option1": "Allow all",
+                  "option2": "Deny all then allow needed",
+                  "option3": "Allow unknown",
+                  "option4": "Random allow",
+                  "correct_option": 2
+                },
+                {
+                  "question_statement": "Which concept isolates networks?",
+                  "option1": "Segmentation",
+                  "option2": "Mirroring",
+                  "option3": "Load balancing",
+                  "option4": "Caching",
+                  "correct_option": 1
+                }
+              ]
+            },
+            {
+              "title": "Monitoring & Logs",
+              "date_of_quiz": "2026-01-24",
+              "time_duration": "12 min",
+              "remarks": "Detect and respond to threats.",
+              "questions": [
+                {
+                  "question_statement": "What is the purpose of log monitoring?",
+                  "option1": "Disable alerts",
+                  "option2": "Detect suspicious activity",
+                  "option3": "Delete logs",
+                  "option4": "Encrypt Wi-Fi",
+                  "correct_option": 2
+                },
+                {
+                  "question_statement": "Which tool aggregates security logs?",
+                  "option1": "SIEM",
+                  "option2": "CMS",
+                  "option3": "CDN",
+                  "option4": "ETL",
+                  "correct_option": 1
+                },
+                {
+                  "question_statement": "Which metric helps detect brute force attacks?",
+                  "option1": "Login failure rate",
+                  "option2": "CPU usage",
+                  "option3": "Disk space",
+                  "option4": "Cache hits",
+                  "correct_option": 1
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Cloud & DevOps",
+      "description": "Automate infrastructure and deliver software faster.",
+      "chapters": [
+        {
+          "name": "Cloud Basics",
+          "description": "Cloud models and core services.",
+          "quizzes": [
+            {
+              "title": "Cloud Models",
+              "date_of_quiz": "2026-01-06",
+              "time_duration": "10 min",
+              "remarks": "IaaS, PaaS, SaaS and shared responsibility.",
+              "questions": [
+                {
+                  "question_statement": "Which model provides managed runtime for apps?",
+                  "option1": "IaaS",
+                  "option2": "PaaS",
+                  "option3": "SaaS",
+                  "option4": "On-prem",
+                  "correct_option": 2
+                },
+                {
+                  "question_statement": "Which model delivers software to end users?",
+                  "option1": "IaaS",
+                  "option2": "PaaS",
+                  "option3": "SaaS",
+                  "option4": "FaaS",
+                  "correct_option": 3
+                },
+                {
+                  "question_statement": "Who manages the OS in IaaS?",
+                  "option1": "Customer",
+                  "option2": "Provider",
+                  "option3": "Both",
+                  "option4": "Neither",
+                  "correct_option": 1
+                }
+              ]
+            },
+            {
+              "title": "Cloud Architecture",
+              "date_of_quiz": "2026-01-07",
+              "time_duration": "12 min",
+              "remarks": "Regions, availability zones, and scaling.",
+              "questions": [
+                {
+                  "question_statement": "What improves fault tolerance?",
+                  "option1": "Single region",
+                  "option2": "Multiple AZs",
+                  "option3": "Single server",
+                  "option4": "Manual scaling",
+                  "correct_option": 2
+                },
+                {
+                  "question_statement": "Which service scales compute automatically?",
+                  "option1": "Auto scaling",
+                  "option2": "Object storage",
+                  "option3": "DNS",
+                  "option4": "CDN",
+                  "correct_option": 1
+                },
+                {
+                  "question_statement": "What is a CDN used for?",
+                  "option1": "Database backups",
+                  "option2": "Content delivery",
+                  "option3": "Authentication",
+                  "option4": "Monitoring",
+                  "correct_option": 2
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CI/CD Pipelines",
+          "description": "Automate build, test, and deploy.",
+          "quizzes": [
+            {
+              "title": "Pipeline Basics",
+              "date_of_quiz": "2026-01-09",
+              "time_duration": "10 min",
+              "remarks": "Build, test, deploy stages.",
+              "questions": [
+                {
+                  "question_statement": "What is the goal of CI?",
+                  "option1": "Manual deployment",
+                  "option2": "Frequent integration",
+                  "option3": "Code duplication",
+                  "option4": "No tests",
+                  "correct_option": 2
+                },
+                {
+                  "question_statement": "Which tool is commonly used for CI?",
+                  "option1": "GitHub Actions",
+                  "option2": "Figma",
+                  "option3": "Excel",
+                  "option4": "Photoshop",
+                  "correct_option": 1
+                },
+                {
+                  "question_statement": "What does CD stand for?",
+                  "option1": "Continuous Delivery",
+                  "option2": "Code Deployment",
+                  "option3": "Container Driver",
+                  "option4": "Core Dev",
+                  "correct_option": 1
+                }
+              ]
+            },
+            {
+              "title": "Release Strategies",
+              "date_of_quiz": "2026-01-11",
+              "time_duration": "10 min",
+              "remarks": "Blue-green, canary, and rolling.",
+              "questions": [
+                {
+                  "question_statement": "Which strategy deploys to a small subset first?",
+                  "option1": "Big bang",
+                  "option2": "Canary",
+                  "option3": "Rollback",
+                  "option4": "Freeze",
+                  "correct_option": 2
+                },
+                {
+                  "question_statement": "Which strategy uses two environments?",
+                  "option1": "Blue-green",
+                  "option2": "Canary",
+                  "option3": "Rolling",
+                  "option4": "Shadow",
+                  "correct_option": 1
+                },
+                {
+                  "question_statement": "Which strategy updates servers gradually?",
+                  "option1": "Rolling",
+                  "option2": "Blue-green",
+                  "option3": "Canary",
+                  "option4": "Big bang",
+                  "correct_option": 1
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -33,14 +33,20 @@
             <h1 class="h3 mb-1 display-font">Hello, {{ user.full_name }}</h1>
             <p class="muted mb-0">Track your wins, explore new subjects, and keep your momentum.</p>
           </div>
-          <form class="d-inline" @submit.prevent="search">
-            <div class="input-group">
-              <input type="text" class="form-control" v-model="query" placeholder="Search subjects, chapters, quizzes">
-              <button class="btn btn-primary" type="submit">
-                <i class="fas fa-search"></i>
-              </button>
-            </div>
-          </form>
+          <div class="d-flex flex-wrap align-items-center gap-2">
+            <form class="d-inline" @submit.prevent="search">
+              <div class="input-group">
+                <input type="text" class="form-control" v-model="query" placeholder="Search subjects, chapters, quizzes">
+                <button class="btn btn-primary" type="submit">
+                  <i class="fas fa-search"></i>
+                </button>
+              </div>
+            </form>
+            <button class="btn btn-outline-danger" @click="logout">
+              <i class="fas fa-sign-out-alt"></i>
+              Logout
+            </button>
+          </div>
         </div>
       </div>
 
@@ -86,8 +92,8 @@
       </div>
 
       <div class="row g-4 mb-4">
-        <div class="col-xl-7">
-          <div class="card glass-panel p-4 h-100">
+        <div class="col-xl-6">
+          <div class="card glass-panel p-3 h-100">
             <div class="d-flex align-items-center justify-content-between mb-3">
               <div>
                 <h5 class="mb-1 display-font">Subject Coverage</h5>
@@ -98,8 +104,8 @@
             <canvas ref="subjectChart"></canvas>
           </div>
         </div>
-        <div class="col-xl-5">
-          <div class="card glass-panel p-4 h-100">
+        <div class="col-xl-6">
+          <div class="card glass-panel p-3 h-100">
             <div class="d-flex align-items-center justify-content-between mb-3">
               <div>
                 <h5 class="mb-1 display-font">Score Pulse</h5>
@@ -129,6 +135,10 @@
               <button class="btn btn-outline-brand" @click="resetTimer">
                 <i class="fas fa-rotate-left"></i> Reset
               </button>
+              <button class="btn btn-outline-brand" @click="toggleAmbient">
+                <i class="fas" :class="ambientOn ? 'fa-volume-high' : 'fa-volume-xmark'"></i>
+                {{ ambientOn ? 'Sound On' : 'Sound Off' }}
+              </button>
             </div>
             <div class="progress mt-3" style="height: 10px;">
               <div class="progress-bar bg-success" role="progressbar" :style="{ width: `${timerProgress}%` }"></div>
@@ -143,7 +153,44 @@
             </div>
             <p class="muted small">Jot down ideas or reminders while you browse quizzes.</p>
             <textarea class="form-control" rows="6" v-model="notes" @input="saveNotes"
-              placeholder="Write your study notes here..."></textarea>
+              @keydown="handleNotesKeydown" placeholder="- Add bullet notes"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4 mb-4">
+        <div class="col-lg-12">
+          <div class="card glass-panel p-4 h-100">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-2">
+              <div>
+                <h5 class="mb-0 display-font">Practice Mix</h5>
+                <p class="muted small mb-0">Generate a quick mix of quizzes to test yourself.</p>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <select class="form-select" style="width: 140px;" v-model.number="mixSize">
+                  <option :value="3">3 quizzes</option>
+                  <option :value="5">5 quizzes</option>
+                  <option :value="7">7 quizzes</option>
+                </select>
+                <button class="btn btn-outline-brand" @click="generatePracticeMix">
+                  <i class="fas fa-shuffle"></i> Shuffle
+                </button>
+              </div>
+            </div>
+            <div v-if="practiceMix.length" class="row g-3">
+              <div v-for="quiz in practiceMix" :key="quiz.id" class="col-md-4">
+                <div class="card h-100 hover-lift">
+                  <div class="card-body">
+                    <p class="muted small mb-1">{{ quiz.subject }} / {{ quiz.chapter }}</p>
+                    <h6 class="mb-2">{{ quiz.title }}</h6>
+                    <router-link :to="`/user/quiz/${quiz.id}`" class="btn btn-primary btn-sm">
+                      Start Quiz
+                    </router-link>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-else class="muted small">No quizzes available yet.</div>
           </div>
         </div>
       </div>
@@ -204,12 +251,35 @@
         </div>
       </div>
       <div v-else class="card shadow mb-4">
-        <div class="card-header py-3">
+        <div class="card-header py-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
           <h6 class="m-0 font-weight-bold text-primary">Available Subjects</h6>
+          <div class="d-flex align-items-center gap-2">
+            <div class="dropdown">
+              <button class="btn btn-outline-brand dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown">
+                Sort: {{ subjectSortLabel }}
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><button class="dropdown-item" @click="subjectSort = 'name_asc'">Name (A-Z)</button></li>
+                <li><button class="dropdown-item" @click="subjectSort = 'name_desc'">Name (Z-A)</button></li>
+                <li><button class="dropdown-item" @click="subjectSort = 'chapters_desc'">Most chapters</button></li>
+                <li><button class="dropdown-item" @click="subjectSort = 'quizzes_desc'">Most quizzes</button></li>
+              </ul>
+            </div>
+            <div class="dropdown">
+              <button class="btn btn-outline-brand dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown">
+                Filter: {{ subjectFilterLabel }}
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><button class="dropdown-item" @click="subjectFilter = 'all'">All subjects</button></li>
+                <li><button class="dropdown-item" @click="subjectFilter = 'with_quizzes'">With quizzes</button></li>
+                <li><button class="dropdown-item" @click="subjectFilter = 'with_chapters'">With chapters</button></li>
+              </ul>
+            </div>
+          </div>
         </div>
         <div class="card-body">
           <div class="row">
-            <div v-for="subject in subjects" :key="subject.id" class="col-lg-4 mb-4">
+            <div v-for="subject in displayedSubjects" :key="subject.id" class="col-lg-4 mb-4">
               <div class="card h-100 hover-lift">
                 <div class="card-body">
                   <h5 class="card-title">{{ subject.name }}</h5>
@@ -243,11 +313,18 @@ export default {
     const avg_score = ref(0);
     const query = ref('');
     const subjects = ref([]);
+    const subjectSort = ref('name_asc');
+    const subjectFilter = ref('all');
+    const mixSize = ref(3);
+    const practiceMix = ref([]);
     const subjectChart = ref(null);
     const scoreChart = ref(null);
     const notes = ref(localStorage.getItem('quizmaster_notes') || '');
     const timerSeconds = ref(1500);
     const timerRunning = ref(false);
+    const ambientOn = ref(false);
+    let audioContext = null;
+    let ambientNodes = [];
     let timerInterval = null;
     let subjectChartInstance = null;
     let scoreChartInstance = null;
@@ -261,6 +338,72 @@ export default {
     const timerProgress = computed(() => {
       const total = 1500;
       return Math.min(100, Math.max(0, ((total - timerSeconds.value) / total) * 100));
+    });
+
+    const subjectSortLabel = computed(() => {
+      const labels = {
+        name_asc: 'Name (A-Z)',
+        name_desc: 'Name (Z-A)',
+        chapters_desc: 'Most chapters',
+        quizzes_desc: 'Most quizzes',
+      };
+      return labels[subjectSort.value] || 'Name (A-Z)';
+    });
+
+    const subjectFilterLabel = computed(() => {
+      const labels = {
+        all: 'All subjects',
+        with_quizzes: 'With quizzes',
+        with_chapters: 'With chapters',
+      };
+      return labels[subjectFilter.value] || 'All subjects';
+    });
+
+    const getQuizTotal = (subject) => {
+      return (subject.chapters || []).reduce((sum, chapter) => {
+        return sum + (chapter.quizzes ? chapter.quizzes.length : 0);
+      }, 0);
+    };
+
+    const displayedSubjects = computed(() => {
+      let list = [...subjects.value];
+      if (subjectFilter.value === 'with_quizzes') {
+        list = list.filter(subject => getQuizTotal(subject) > 0);
+      } else if (subjectFilter.value === 'with_chapters') {
+        list = list.filter(subject => (subject.chapters || []).length > 0);
+      }
+
+      switch (subjectSort.value) {
+        case 'name_desc':
+          list.sort((a, b) => b.name.localeCompare(a.name));
+          break;
+        case 'chapters_desc':
+          list.sort((a, b) => (b.chapters?.length || 0) - (a.chapters?.length || 0));
+          break;
+        case 'quizzes_desc':
+          list.sort((a, b) => getQuizTotal(b) - getQuizTotal(a));
+          break;
+        default:
+          list.sort((a, b) => a.name.localeCompare(b.name));
+      }
+      return list;
+    });
+
+    const allQuizzes = computed(() => {
+      const quizzes = [];
+      subjects.value.forEach(subject => {
+        (subject.chapters || []).forEach(chapter => {
+          (chapter.quizzes || []).forEach(quiz => {
+            quizzes.push({
+              id: quiz.id,
+              title: quiz.title,
+              chapter: chapter.name,
+              subject: subject.name,
+            });
+          });
+        });
+      });
+      return quizzes;
     });
 
     const fetchUserData = async () => {
@@ -299,6 +442,7 @@ export default {
         });
         if (response.ok) {
           subjects.value = await response.json();
+          generatePracticeMix();
         } else {
           console.error('Failed to fetch subjects');
           if (response.status === 401) {
@@ -366,7 +510,89 @@ export default {
     };
 
     const saveNotes = () => {
+      notes.value = normalizeNotes(notes.value);
       localStorage.setItem('quizmaster_notes', notes.value);
+    };
+
+    const normalizeNotes = (value) => {
+      if (!value) {
+        return '- ';
+      }
+      const lines = value.split('\n').map(line => {
+        if (!line.trim()) return '- ';
+        return line.trim().startsWith('-') ? line.trim() : `- ${line.trim()}`;
+      });
+      return lines.join('\n');
+    };
+
+    const handleNotesKeydown = (event) => {
+      if (event.key !== 'Enter') return;
+      event.preventDefault();
+      const textarea = event.target;
+      const { selectionStart, selectionEnd } = textarea;
+      const before = notes.value.substring(0, selectionStart);
+      const after = notes.value.substring(selectionEnd);
+      const insert = '\n- ';
+      notes.value = `${before}${insert}${after}`;
+      saveNotes();
+      requestAnimationFrame(() => {
+        const cursor = selectionStart + insert.length;
+        textarea.selectionStart = cursor;
+        textarea.selectionEnd = cursor;
+      });
+    };
+
+    const startAmbient = () => {
+      if (audioContext) return;
+      const Context = window.AudioContext || window.webkitAudioContext;
+      audioContext = new Context();
+
+      const baseFrequencies = [110, 164.81, 220];
+      ambientNodes = baseFrequencies.map(freq => {
+        const osc = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        gain.gain.value = 0.03;
+        osc.connect(gain).connect(audioContext.destination);
+        osc.start();
+        return { osc, gain };
+      });
+    };
+
+    const stopAmbient = () => {
+      ambientNodes.forEach(node => {
+        node.osc.stop();
+      });
+      ambientNodes = [];
+      if (audioContext) {
+        audioContext.close();
+        audioContext = null;
+      }
+    };
+
+    const toggleAmbient = () => {
+      if (ambientOn.value) {
+        ambientOn.value = false;
+        stopAmbient();
+        return;
+      }
+      ambientOn.value = true;
+      startAmbient();
+    };
+
+    const generatePracticeMix = () => {
+      const source = [...allQuizzes.value];
+      if (!source.length) {
+        practiceMix.value = [];
+        return;
+      }
+      const mix = [];
+      while (source.length && mix.length < mixSize.value) {
+        const index = Math.floor(Math.random() * source.length);
+        mix.push(source.splice(index, 1)[0]);
+      }
+      practiceMix.value = mix;
     };
 
     const toggleTimer = () => {
@@ -456,12 +682,14 @@ export default {
     }, { deep: true });
 
     onMounted(() => {
+      notes.value = normalizeNotes(notes.value);
       fetchUserData();
       fetchSubjects();
     });
 
     onBeforeUnmount(() => {
       clearInterval(timerInterval);
+      stopAmbient();
       if (subjectChartInstance) {
         subjectChartInstance.destroy();
       }
@@ -484,11 +712,22 @@ export default {
       scoreChart,
       notes,
       saveNotes,
+      handleNotesKeydown,
       timerRunning,
       formattedTime,
       timerProgress,
       toggleTimer,
       resetTimer,
+      ambientOn,
+      toggleAmbient,
+      subjectSort,
+      subjectFilter,
+      subjectSortLabel,
+      subjectFilterLabel,
+      displayedSubjects,
+      mixSize,
+      practiceMix,
+      generatePracticeMix,
     };
   },
 };
