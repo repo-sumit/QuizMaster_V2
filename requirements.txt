@@ -1,0 +1,6 @@
+Flask
+Flask-Cors
+Flask-SQLAlchemy
+PyJWT
+redis
+celery
