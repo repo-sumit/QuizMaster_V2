@@ -12,6 +12,7 @@
     "@fortawesome/fontawesome-free": "^7.0.0",
     "bootstrap": "^5.3.7",
     "bootstrap-icons": "^1.13.1",
+    "chart.js": "^4.4.4",
     "i": "^0.3.7",
     "vue": "^3.5.18",
     "vue-router": "^4.5.1"

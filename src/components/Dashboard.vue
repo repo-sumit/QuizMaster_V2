@@ -27,15 +27,57 @@
     </nav>
 
     <div class="container-fluid p-5">
-      <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-        <div class="d-flex gap-2 ms-auto">
-          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createSubjectModal">
-            <i class="fas fa-plus"></i> Add Subject
-          </button>
-          <button class="btn btn-primary" @click="exportData">
-            <i class="fas fa-file-export"></i> Export
-          </button>
+      <div class="card glass-panel p-4 mb-4 bg-gradient-to-r from-sky-50 via-emerald-50 to-amber-50">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+          <div>
+            <span class="badge-soft">Admin workspace</span>
+            <h1 class="h3 mb-1 display-font">Dashboard</h1>
+            <p class="muted mb-0">Manage subjects, chapters, and keep your content organized.</p>
+          </div>
+          <div class="d-flex gap-2 ms-auto">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createSubjectModal">
+              <i class="fas fa-plus"></i> Add Subject
+            </button>
+            <button class="btn btn-primary" @click="exportData">
+              <i class="fas fa-file-export"></i> Export
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4 mb-4">
+        <div class="col-md-4">
+          <div class="card stat-card h-100">
+            <div class="card-body">
+              <p class="muted small mb-1">Subjects</p>
+              <div class="d-flex align-items-center justify-content-between">
+                <h3 class="mb-0 display-font">{{ subjectCount }}</h3>
+                <i class="fas fa-book fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card stat-card h-100">
+            <div class="card-body">
+              <p class="muted small mb-1">Chapters</p>
+              <div class="d-flex align-items-center justify-content-between">
+                <h3 class="mb-0 display-font">{{ chapterCount }}</h3>
+                <i class="fas fa-folder fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card stat-card h-100">
+            <div class="card-body">
+              <p class="muted small mb-1">Quizzes</p>
+              <div class="d-flex align-items-center justify-content-between">
+                <h3 class="mb-0 display-font">{{ quizCount }}</h3>
+                <i class="fas fa-question-circle fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -176,7 +218,7 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 
 export default {
@@ -186,6 +228,18 @@ export default {
     const subjects = ref([]);
     const newSubject = ref({ name: '', description: '' });
     const newChapter = ref({ name: '', description: '' });
+
+    const subjectCount = computed(() => subjects.value.length);
+    const chapterCount = computed(() => {
+      return subjects.value.reduce((sum, subject) => sum + (subject.chapters ? subject.chapters.length : 0), 0);
+    });
+    const quizCount = computed(() => {
+      return subjects.value.reduce((sum, subject) => {
+        return sum + (subject.chapters || []).reduce((innerSum, chapter) => {
+          return innerSum + (chapter.quizzes ? chapter.quizzes.length : 0);
+        }, 0);
+      }, 0);
+    });
 
     // Helper function to get headers with token
     const getHeaders = () => {
@@ -368,6 +422,9 @@ export default {
       subjects,
       newSubject,
       newChapter,
+      subjectCount,
+      chapterCount,
+      quizCount,
       createSubject,
       editSubject,
       deleteSubject,

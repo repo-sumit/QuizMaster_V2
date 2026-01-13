@@ -1,0 +1,123 @@
+:root {
+  --ink: #0f172a;
+  --muted: #64748b;
+  --brand: #0ea5a4;
+  --brand-dark: #0f766e;
+  --accent: #f59e0b;
+  --surface: #f8fafc;
+  --surface-strong: #ffffff;
+  --ring: rgba(14, 165, 164, 0.25);
+  --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.08);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Source Sans 3", sans-serif;
+  color: var(--ink);
+  background: radial-gradient(circle at top left, #fef3c7 0%, transparent 45%),
+    radial-gradient(circle at top right, #e0f2fe 0%, transparent 40%),
+    #f8fafc;
+  min-height: 100vh;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+.display-font {
+  font-family: "Space Grotesk", sans-serif;
+  letter-spacing: -0.01em;
+}
+
+.app-shell {
+  min-height: 100vh;
+}
+
+.navbar {
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.navbar-brand {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.card {
+  border-radius: 16px;
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid rgba(15, 23, 42, 0.05);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 50px rgba(15, 23, 42, 0.12);
+}
+
+.btn-primary {
+  background-color: var(--brand);
+  border-color: var(--brand);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: var(--brand-dark);
+  border-color: var(--brand-dark);
+  box-shadow: 0 0 0 0.2rem var(--ring);
+}
+
+.btn-outline-brand {
+  border: 1px solid rgba(14, 165, 164, 0.5);
+  color: var(--brand-dark);
+  background: rgba(14, 165, 164, 0.08);
+}
+
+.btn-outline-brand:hover {
+  background: rgba(14, 165, 164, 0.18);
+  color: var(--brand-dark);
+}
+
+.badge-soft {
+  background: rgba(245, 158, 11, 0.15);
+  color: #b45309;
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  font-weight: 600;
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.stat-card {
+  background: linear-gradient(135deg, rgba(14, 165, 164, 0.08), rgba(15, 118, 110, 0.02));
+}
+
+.score-chip {
+  background: rgba(14, 165, 164, 0.12);
+  color: var(--brand-dark);
+  font-weight: 600;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.hover-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 30px rgba(15, 23, 42, 0.12);
+}

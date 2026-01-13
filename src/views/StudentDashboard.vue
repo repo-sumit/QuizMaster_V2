@@ -26,12 +26,16 @@
       </div>
     </nav>
     <div class="container-fluid p-5">
-      <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Welcome, {{ user.full_name }}</h1>
-        <div>
+      <div class="card glass-panel p-4 mb-4 bg-gradient-to-r from-amber-50 via-orange-50 to-emerald-50">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+          <div>
+            <span class="badge-soft">Welcome back</span>
+            <h1 class="h3 mb-1 display-font">Hello, {{ user.full_name }}</h1>
+            <p class="muted mb-0">Track your wins, explore new subjects, and keep your momentum.</p>
+          </div>
           <form class="d-inline" @submit.prevent="search">
             <div class="input-group">
-              <input type="text" class="form-control" v-model="query" placeholder="Search...">
+              <input type="text" class="form-control" v-model="query" placeholder="Search subjects, chapters, quizzes">
               <button class="btn btn-primary" type="submit">
                 <i class="fas fa-search"></i>
               </button>
@@ -40,10 +44,9 @@
         </div>
       </div>
 
-      <!-- Score Summary -->
-      <div class="row">
-        <div class="col-xl-6 mb-4">
-          <div class="card border-left-primary shadow h-100 py-2">
+      <div class="row g-4 mb-4">
+        <div class="col-xl-6">
+          <div class="card border-left-primary h-100 py-2 stat-card">
             <div class="card-body">
               <div class="row no-gutters align-items-center">
                 <div class="col mr-2">
@@ -61,8 +64,8 @@
             </div>
           </div>
         </div>
-        <div class="col-xl-6 mb-4">
-          <div class="card border-left-success shadow h-100 py-2">
+        <div class="col-xl-6">
+          <div class="card border-left-success h-100 py-2 stat-card">
             <div class="card-body">
               <div class="row no-gutters align-items-center">
                 <div class="col mr-2">
@@ -82,19 +85,80 @@
         </div>
       </div>
 
-      <!-- Search Results or Normal View -->
+      <div class="row g-4 mb-4">
+        <div class="col-xl-7">
+          <div class="card glass-panel p-4 h-100">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <div>
+                <h5 class="mb-1 display-font">Subject Coverage</h5>
+                <p class="muted small mb-0">See how content is distributed across subjects.</p>
+              </div>
+              <span class="score-chip">{{ subjects.length }} subjects</span>
+            </div>
+            <canvas ref="subjectChart"></canvas>
+          </div>
+        </div>
+        <div class="col-xl-5">
+          <div class="card glass-panel p-4 h-100">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <div>
+                <h5 class="mb-1 display-font">Score Pulse</h5>
+                <p class="muted small mb-0">Your average score, visualized.</p>
+              </div>
+              <span class="badge-soft">Goal 85%</span>
+            </div>
+            <canvas ref="scoreChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4 mb-4">
+        <div class="col-lg-6">
+          <div class="card glass-panel p-4 h-100">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <h5 class="mb-0 display-font">Focus Sprint</h5>
+              <span class="badge-soft">25 min</span>
+            </div>
+            <p class="muted small">Start a timed session to stay sharp while you study.</p>
+            <div class="display-6 mb-3">{{ formattedTime }}</div>
+            <div class="d-flex gap-2">
+              <button class="btn btn-primary" @click="toggleTimer">
+                <i class="fas" :class="timerRunning ? 'fa-pause' : 'fa-play'"></i>
+                {{ timerRunning ? 'Pause' : 'Start' }}
+              </button>
+              <button class="btn btn-outline-brand" @click="resetTimer">
+                <i class="fas fa-rotate-left"></i> Reset
+              </button>
+            </div>
+            <div class="progress mt-3" style="height: 10px;">
+              <div class="progress-bar bg-success" role="progressbar" :style="{ width: `${timerProgress}%` }"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="card glass-panel p-4 h-100">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <h5 class="mb-0 display-font">Quick Notes</h5>
+              <span class="badge-soft">Auto-saved</span>
+            </div>
+            <p class="muted small">Jot down ideas or reminders while you browse quizzes.</p>
+            <textarea class="form-control" rows="6" v-model="notes" @input="saveNotes"
+              placeholder="Write your study notes here..."></textarea>
+          </div>
+        </div>
+      </div>
+
       <div v-if="query" class="card shadow mb-4">
         <div class="card-header py-3">
           <h6 class="m-0 font-weight-bold text-primary">Search Results for "{{ query }}"</h6>
         </div>
         <div class="card-body">
           <div v-if="filteredResults.subjects.length || filteredResults.chapters.length || filteredResults.quizzes.length">
-            <!-- Subjects Results -->
             <div v-if="filteredResults.subjects.length">
               <h5>Subjects</h5>
               <div class="row">
                 <div v-for="subject in filteredResults.subjects" :key="subject.id" class="col-lg-4 mb-4">
-                  <div class="card h-100">
+                  <div class="card h-100 hover-lift">
                     <div class="card-body">
                       <h5 class="card-title">{{ subject.name }}</h5>
                       <p class="card-text">{{ truncate(subject.description, 100) }}</p>
@@ -106,7 +170,6 @@
                 </div>
               </div>
             </div>
-            <!-- Chapters Results -->
             <div v-if="filteredResults.chapters.length" class="mt-4">
               <h5>Chapters</h5>
               <div class="list-group">
@@ -120,7 +183,6 @@
                 </router-link>
               </div>
             </div>
-            <!-- Quizzes Results -->
             <div v-if="filteredResults.quizzes.length" class="mt-4">
               <h5>Quizzes</h5>
               <div class="list-group">
@@ -141,7 +203,6 @@
           </div>
         </div>
       </div>
-      <!-- Normal Subjects List -->
       <div v-else class="card shadow mb-4">
         <div class="card-header py-3">
           <h6 class="m-0 font-weight-bold text-primary">Available Subjects</h6>
@@ -149,7 +210,7 @@
         <div class="card-body">
           <div class="row">
             <div v-for="subject in subjects" :key="subject.id" class="col-lg-4 mb-4">
-              <div class="card h-100">
+              <div class="card h-100 hover-lift">
                 <div class="card-body">
                   <h5 class="card-title">{{ subject.name }}</h5>
                   <p class="card-text">{{ truncate(subject.description, 100) }}</p>
@@ -167,8 +228,11 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, watch, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
+import { Chart, registerables } from 'chart.js';
+
+Chart.register(...registerables);
 
 export default {
   name: 'UserDashboard',
@@ -179,6 +243,25 @@ export default {
     const avg_score = ref(0);
     const query = ref('');
     const subjects = ref([]);
+    const subjectChart = ref(null);
+    const scoreChart = ref(null);
+    const notes = ref(localStorage.getItem('quizmaster_notes') || '');
+    const timerSeconds = ref(1500);
+    const timerRunning = ref(false);
+    let timerInterval = null;
+    let subjectChartInstance = null;
+    let scoreChartInstance = null;
+
+    const formattedTime = computed(() => {
+      const minutes = Math.floor(timerSeconds.value / 60).toString().padStart(2, '0');
+      const seconds = (timerSeconds.value % 60).toString().padStart(2, '0');
+      return `${minutes}:${seconds}`;
+    });
+
+    const timerProgress = computed(() => {
+      const total = 1500;
+      return Math.min(100, Math.max(0, ((total - timerSeconds.value) / total) * 100));
+    });
 
     const fetchUserData = async () => {
       try {
@@ -273,13 +356,119 @@ export default {
       router.push('/login');
     };
 
+    const search = () => {
+      return;
+    };
+
     const truncate = (text, length) => {
       if (!text || text.length <= length) return text;
       return text.substring(0, length) + '...';
     };
 
-    fetchUserData();
-    fetchSubjects();
+    const saveNotes = () => {
+      localStorage.setItem('quizmaster_notes', notes.value);
+    };
+
+    const toggleTimer = () => {
+      if (timerRunning.value) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        timerRunning.value = false;
+        return;
+      }
+      timerRunning.value = true;
+      timerInterval = setInterval(() => {
+        if (timerSeconds.value > 0) {
+          timerSeconds.value -= 1;
+        } else {
+          clearInterval(timerInterval);
+          timerInterval = null;
+          timerRunning.value = false;
+        }
+      }, 1000);
+    };
+
+    const resetTimer = () => {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      timerRunning.value = false;
+      timerSeconds.value = 1500;
+    };
+
+    const buildSubjectChart = () => {
+      if (!subjectChart.value) return;
+      if (subjectChartInstance) {
+        subjectChartInstance.destroy();
+      }
+      const labels = subjects.value.map(subject => subject.name);
+      const data = subjects.value.map(subject =>
+        (subject.chapters || []).reduce((sum, chapter) => sum + (chapter.quizzes ? chapter.quizzes.length : 0), 0)
+      );
+      subjectChartInstance = new Chart(subjectChart.value, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: 'Quizzes',
+              data,
+              backgroundColor: '#38bdf8',
+              borderRadius: 12,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true } },
+        },
+      });
+    };
+
+    const buildScoreChart = () => {
+      if (!scoreChart.value) return;
+      if (scoreChartInstance) {
+        scoreChartInstance.destroy();
+      }
+      const scoreValue = Number(avg_score.value) || 0;
+      scoreChartInstance = new Chart(scoreChart.value, {
+        type: 'doughnut',
+        data: {
+          labels: ['Average Score', 'Remaining'],
+          datasets: [
+            {
+              data: [scoreValue, Math.max(0, 100 - scoreValue)],
+              backgroundColor: ['#0ea5a4', '#e2e8f0'],
+              borderWidth: 0,
+            },
+          ],
+        },
+        options: {
+          cutout: '70%',
+          plugins: { legend: { display: false } },
+        },
+      });
+    };
+
+    watch([subjects, avg_score], () => {
+      buildSubjectChart();
+      buildScoreChart();
+    }, { deep: true });
+
+    onMounted(() => {
+      fetchUserData();
+      fetchSubjects();
+    });
+
+    onBeforeUnmount(() => {
+      clearInterval(timerInterval);
+      if (subjectChartInstance) {
+        subjectChartInstance.destroy();
+      }
+      if (scoreChartInstance) {
+        scoreChartInstance.destroy();
+      }
+    });
 
     return {
       user,
@@ -289,7 +478,17 @@ export default {
       subjects,
       filteredResults,
       logout,
+      search,
       truncate,
+      subjectChart,
+      scoreChart,
+      notes,
+      saveNotes,
+      timerRunning,
+      formattedTime,
+      timerProgress,
+      toggleTimer,
+      resetTimer,
     };
   },
 };
