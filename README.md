@@ -189,7 +189,3 @@ The backend automatically seeds default subjects, chapters, quizzes, and questio
 
 Built with passion using **Flask + Vue.js**.
 Designed for educators, learners, and future-ready assessments.
-
----
-
-Would you like me to also **add badges for build status, license, and code coverage**, plus a **screenshots section** (with placeholders) so the README looks even more engaging?
